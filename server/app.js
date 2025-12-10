@@ -14,13 +14,17 @@ const router = require('./router.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-const dbURI = process.env.MONGODB_URI || 'mongodb://localhost/DomoMaker';
+const dbURI = process.env.MONGODB_URI || 'mongodb://localhost/FortuneRoller';
 mongoose.connect(dbURI).catch((err) => {
     if (err) {
         console.log('Could not connect to database');
         throw err;
     }
 });
+
+
+// console.log("Using DB:", process.env.MONGODB_URI);
+// console.log("Using Redis:", process.env.REDISCLOUD_URL);
 
 const redisClient = redis.createClient({
     url: process.env.REDISCLOUD_URL
@@ -40,10 +44,16 @@ redisClient.connect().then(() => {
         store: new RedisStore({
             client: redisClient
         }),
-        secret: 'Domo Arigato',
+        secret: 'Fate Sisters',
         resave: false,
         saveUninitialized: false
     }));
+
+    //sets local user variable for handlebars
+    app.use((req, res, next) => {
+        res.locals.account = req.session.account;
+        next();
+    });
 
 
     app.engine('handlebars', expressHandlebars.engine({ defaultLayout: '' }));
