@@ -3,9 +3,9 @@ const { login } = require('./server/controllers/Account');
 
 module.exports = {
     entry: {
-        app: './client/maker.jsx',
+        app: './client/fortuna.jsx',
         login: './client/login.jsx',
-
+        account: './client/account.jsx',
 },
     module: {
         rules: [
