@@ -2,7 +2,7 @@ const helper = require('./helper.js');
 const React = require('react');
 const { createRoot } = require('react-dom/client');
 
-const hangleLogin = (e) => {
+const handleLogin = (e) => {
     e.preventDefault();
     helper.hideError();
 
@@ -25,8 +25,10 @@ const handleSignup = (e) => {
     const username = e.target.querySelector('#user').value;
     const pass = e.target.querySelector('#pass').value;
     const pass2 = e.target.querySelector('#pass2').value;
+    const birthinp = e.target.querySelector('#birthday').value;
+    const birthday = new Date(birthinp).toLocaleDateString();
 
-    if (!username || !pass || !pass2) {
+    if (!username || !pass || !pass2 || !birthday) {
         helper.handleError('All fields are required');
         return false;
     }
@@ -36,7 +38,7 @@ const handleSignup = (e) => {
         return false;
     }
 
-    helper.sendPost(e.target.action, { username, pass, pass2 });
+    helper.sendPost(e.target.action, { username, pass, pass2, birthday });
     return false;
 }
 
@@ -44,7 +46,7 @@ const LoginWindow = (props) => {
     return (
         <form id="loginForm"
             name="loginForm"
-            onSubmit={hangleLogin}
+            onSubmit={handleLogin}
             action="/login"
             method="POST"
             className="mainForm"
@@ -73,7 +75,13 @@ const SignupWindow = (props) => {
             <input id="pass" type="password" name="pass" placeholder="password" />
             <label htmlFor="pass2">Password: </label>
             <input id="pass2" type="password" name="pass2" placeholder="retype password" />
+
+            {/* This adds a date attribute to the form */}
+            <label htmlFor="birthday">Birthday: </label>
+            <input id="birthday" type="date" name="birthday" />
+
             <input className="formSubmit" type="submit" value="Sign up" />
+
         </form>
     );
 };
@@ -81,7 +89,7 @@ const SignupWindow = (props) => {
 const init = () => {
     const loginButton = document.getElementById('loginButton');
     const signupButton = document.getElementById('signupButton');
-    
+
     const root = createRoot(document.getElementById('content'));
     loginButton.addEventListener('click', (e) => {
         e.preventDefault();
@@ -95,7 +103,7 @@ const init = () => {
         return false;
     });
 
-    root.render(<LoginWindow /> );
+    root.render(<LoginWindow />);
 };
 
 window.onload = init;
